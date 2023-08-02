@@ -478,6 +478,26 @@
 	};
 };
 
+&spi1 {
+	status = "okay";
+
+	/* IR LED @ 0  */
+};
+
+&i2c4 {
+	status = "okay";
+
+	/* Qcom SMB1390 @ 10 */
+	/* Cirrus Logic CS35L41 @ 40  */
+	/* IDTP9220 @ 3B  */
+}
+
+&i2c9 {
+	status = "okay";
+
+	/* NXP SN100T @ 28  */
+};
+
 &i2c17 {
 	clock-frequency = <400000>;
 	status = "okay";
