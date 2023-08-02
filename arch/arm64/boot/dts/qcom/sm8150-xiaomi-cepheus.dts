@@ -175,6 +175,15 @@
 		gpio = <&tlmm 21 0>;
 	};
 
+	touch_vddio_vreg: touch_vddio_vreg {
+		compatible = "regulator-fixed";
+		regulator-name = "disp_vddio_vreg";
+		startup-delay-us = <4000>;
+		enable-active-high;
+		regulator-boot-on;
+		gpio = <&tlmm 84 0>;
+	};
+	
 	vph_pwr: vph-pwr-regulator {
 		compatible = "regulator-fixed";
 		regulator-name = "vph_pwr";
@@ -469,6 +478,47 @@
 	};
 };
 
+&i2c17 {
+	clock-frequency = <400000>;
+	status = "okay";
+
+	/* FingerTipS-Touch521 @ 49 */
+	fts@49 {
+		/*
+		 * Due to serious issues with downstream drivers 
+		 * for FTS521 porting, FTS521 touch is currently disabled
+		*/
+		status = "disabled";
+		compatible = "st,fts";
+		reg = <0x49>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <122 0x2008>;
+		pinctrl-names = "pmx_ts_active", "pmx_ts_suspend";
+		pinctrl-0 = <&ts_active>;
+		pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
+		vdd-supply = <&touch_vddio_vreg>;
+		avdd-supply = <&vreg_l1c_1p8>;
+		fts,pwr-reg-name = "avdd";
+		fts,bus-reg-name = "vdd";
+		fts,irq-gpio = <&tlmm 122 0x2008>;
+		fts,irq-gpio-name = "fts_irq";
+		fts,reset-gpio-enable;
+		fts,reset-gpio = <&tlmm 12 0x00>;
+		fts,reset-gpio-name = "fts_rst";
+		fts,irq-flags = <0x2008>; /* IRQF_ONESHOT | IRQF_TRIGGER_LOW */
+		fts,x-max = <1080>;
+		fts,y-max = <2340>;
+		fts,default-fw-name = "st_fts_f1.ftb";
+		fts,config-array-size = <1>;
+		fts,cfg_0 {
+			fts,tp-vendor = <0x48>;
+			fts,fw-name = "st_fts_f1.ftb";
+			fts,limit-name = "stm_fts_production_limits.csv";
+			fts,clicknum-file-name = "fts+sdc";
+		};
+	};
+};
+
 &gpi_dma0 {
 	status = "okay";
 };
@@ -594,6 +644,29 @@
 		drive-strength = <2>;
 		bias-pull-up;
 		input-enable;
+	};
+
+	ts_active: ts_active {
+			pins = "gpio122", "gpio12";
+			function = "gpio";
+			drive-strength = <8>;
+			bias-pull-up;
+	};
+	
+	ts_int_suspend: ts_int_suspend {
+			pins = "gpio122";
+			function = "gpio";
+			drive-strength = <2>;
+			input-enable;
+			bias-pull-down;
+	};
+
+	ts_reset_suspend: ts_reset_suspend {
+			pins = "gpio12";
+			function = "gpio";
+			drive-strength = <2>;
+			bias-disable;
+			output-low;
 	};
 
 	qup_uart13_sleep: qup-uart13-sleep {
