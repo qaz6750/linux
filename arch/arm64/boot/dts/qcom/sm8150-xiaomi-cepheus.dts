@@ -35,6 +35,8 @@
 / {
 	model = "xiaomi Mi 9";
 	compatible = "xiaomi,cepheus", "qcom,sm8150-cdp", "qcom,sm8150";
+	qcom,msm-id = <339 0x20000>;
+	qcom,pmic-name = "PM8150";
 	qcom,board-id = <37 0>;
 
 	aliases {
