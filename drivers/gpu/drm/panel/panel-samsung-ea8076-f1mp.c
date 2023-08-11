@@ -341,7 +341,7 @@ static struct mipi_dsi_driver samsung_ea8076_f1mp_driver = {
 	.probe = samsung_ea8076_f1mp_probe,
 	.remove = samsung_ea8076_f1mp_remove,
 	.driver = {
-		.name = "panel-ss-ea8076-global",
+		.name = "panel-samsung-ea8076-f1mp",
 		.of_match_table = samsung_ea8076_f1mp_of_match,
 	},
 };
