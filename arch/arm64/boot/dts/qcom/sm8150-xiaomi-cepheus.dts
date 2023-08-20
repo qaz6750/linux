@@ -531,12 +531,8 @@
 	status = "okay";
 
 	/* FingerTipS-Touch521 @ 49 */
-	fts@49 {
-		/*
-		 * Due to serious issues with downstream drivers 
-		 * for FTS521 porting, FTS521 touch is currently disabled
-		*/
-		status = "disabled";
+	touchscreen: fts@49 {
+		status = "okay";
 		compatible = "st,fts";
 		reg = <0x49>;
 		interrupt-parent = <&tlmm>;
