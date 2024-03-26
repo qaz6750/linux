@@ -35,14 +35,14 @@
 
 		framebuffer: framebuffer@9c400000 {
 			compatible = "simple-framebuffer";
-			reg = <0 0x9C400000 0 0x2000000>;
+			reg = <0 0x9C400000 0 (2560 * 1600 * 4)>;
 			status = "okay";
-			width = <2600>;
-			height = <1080>;
-			stride = <(2600 * 4)>;
+			width = <2560>;
+			height = <1600>;
+			stride = <(2560 * 4)>;
 			format = "a8r8g8b8";
-			clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-				 <&gcc GCC_DISP_SF_AXI_CLK>;
+			//clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+			//	 <&gcc GCC_DISP_SF_AXI_CLK>;
 		};
 	};
 
@@ -98,15 +98,15 @@
 			reg = <0x0 0x99300000 0x0 0x2700000>;
 		};
 
-		cont_splash_mem: memory@9c400000 {
-			reg = <0x0 0x9C400000 0x0 0x2000000>;
-			no-map;
-		};
+		//cont_splash_mem: memory@9c400000 {
+		//	reg = <0x0 0x9C400000 0x0 0x2000000>;
+		//	no-map;
+		//};
 
-		disp_rdump_memory: memory@9c400000 {
-			reg = <0x0 0x9C400000 0x0 0x2000000>;
-			no-map;
-		};
+		//disp_rdump_memory: memory@9c400000 {
+		//	reg = <0x0 0x9C400000 0x0 0x2000000>;
+		//	no-map;
+		//};
 
 		cdsp_sec_mem: memory@a4c00000 {
 			reg = <0x0 0xa4c00000 0x0 0x1400000>;
