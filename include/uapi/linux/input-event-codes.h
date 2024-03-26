@@ -524,6 +524,13 @@
 #define KEY_DEL_EOS		0x1c1
 #define KEY_INS_LINE		0x1c2
 #define KEY_DEL_LINE		0x1c3
+#define KEY_SIDE_GESTURE	0x1c6
+#define KEY_BLACK_UI_GESTURE	0x1c7
+
+#define KEY_SIDE_GESTURE_RIGHT	0x1ca
+#define KEY_SIDE_GESTURE_LEFT	0x1cb
+
+#define KEY_RESET		0x1cd
 
 #define KEY_FN			0x1d0
 #define KEY_FN_ESC		0x1d1
@@ -894,6 +901,10 @@
 #define ABS_MT_TOOL_X		0x3c	/* Center X tool position */
 #define ABS_MT_TOOL_Y		0x3d	/* Center Y tool position */
 
+#define ABS_MT_CUSTOM		0x3e	/* custom event */
+#define ABS_MT_CUSTOM2		0x3f	/* custom event only for sensor */
+#define ABS_MT_PALM		0x3e	/* palm touch */
+#define ABS_MT_GRIP		0x3f	/* grip touch */
 
 #define ABS_MAX			0x3f
 #define ABS_CNT			(ABS_MAX+1)
