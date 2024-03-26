@@ -188,6 +188,12 @@ config INPUT_APMPOWER
 	  To compile this driver as a module, choose M here: the
 	  module will be called apm-power.
 
+comment "Samsung TN logging feature"
+config SEC_DEBUG_TSP_LOG
+	tristate "Enable tsp log support"
+	help
+	  This option enables additional log buffer for tsp log.
+
 comment "Input Device Drivers"
 
 source "drivers/input/keyboard/Kconfig"

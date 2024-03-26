@@ -9,6 +9,9 @@ obj-$(CONFIG_INPUT)		+= input-core.o
 input-core-y := input.o input-compat.o input-mt.o input-poller.o ff-core.o
 input-core-y += touchscreen.o
 
+obj-$(CONFIG_SEC_DEBUG_TSP_LOG) += sec_tsp_log.o
+obj-$(CONFIG_INPUT_TOUCHSCREEN) += sec_cmd.o
+
 obj-$(CONFIG_INPUT_FF_MEMLESS)	+= ff-memless.o
 obj-$(CONFIG_INPUT_SPARSEKMAP)	+= sparse-keymap.o
 obj-$(CONFIG_INPUT_MATRIXKMAP)	+= matrix-keymap.o
