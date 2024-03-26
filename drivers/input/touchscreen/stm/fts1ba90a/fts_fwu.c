@@ -783,12 +783,12 @@ done:
 static int fts_load_fw_from_ums(struct fts_ts_info *info)
 {
 	struct file *fp;
-	mm_segment_t old_fs;
+	// mm_segment_t old_fs;
 	long fw_size, nread;
 	int error = 0;
 
-	old_fs = get_fs();
-	set_fs(KERNEL_DS);
+	// old_fs = get_fs();
+	// set_fs(KERNEL_DS);
 
 	fp = filp_open(FTS_DEFAULT_UMS_FW, O_RDONLY, 0400);
 	if (IS_ERR(fp)) {
@@ -862,7 +862,7 @@ alloc_err:
 	filp_close(fp, NULL);
 
 open_err:
-	set_fs(old_fs);
+	// set_fs(old_fs);
 	return error;
 }
 

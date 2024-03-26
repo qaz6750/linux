@@ -42,6 +42,7 @@
 #include <linux/power_supply.h>
 #include <linux/firmware.h>
 #include <linux/regulator/consumer.h>
+#include <linux/pinctrl/consumer.h>
 #include <linux/of_gpio.h>
 #include <linux/input/mt.h>
 #ifdef CONFIG_SEC_SYSFS
@@ -1342,20 +1343,17 @@ static ssize_t fts_tsp_cmoffset_main_read(struct file *file, char __user *buf,
 	return fts_tsp_cmoffset_read(file, buf, len, offset, OFFSET_FW_MAIN);
 }
 
-static const struct file_operations tsp_cmoffset_sdc_file_ops = {
-	.owner = THIS_MODULE,
-	.read = fts_tsp_cmoffset_sdc_read,
-	.llseek = generic_file_llseek,
+static const struct proc_ops tsp_cmoffset_sdc_file_ops = {
+	.proc_read = fts_tsp_cmoffset_sdc_read,
+	.proc_lseek = generic_file_llseek,
 };
-static const struct file_operations tsp_cmoffset_sub_file_ops = {
-	.owner = THIS_MODULE,
-	.read = fts_tsp_cmoffset_sub_read,
-	.llseek = generic_file_llseek,
+static const struct proc_ops tsp_cmoffset_sub_file_ops = {
+	.proc_read = fts_tsp_cmoffset_sub_read,
+	.proc_lseek = generic_file_llseek,
 };
-static const struct file_operations tsp_cmoffset_main_file_ops = {
-	.owner = THIS_MODULE,
-	.read = fts_tsp_cmoffset_main_read,
-	.llseek = generic_file_llseek,
+static const struct proc_ops tsp_cmoffset_main_file_ops = {
+	.proc_read = fts_tsp_cmoffset_main_read,
+	.proc_lseek = generic_file_llseek,
 };
 
 static void fts_init_proc(struct fts_ts_info *info)
@@ -2693,7 +2691,7 @@ static void fts_set_input_prop(struct fts_ts_info *info, struct input_dev *dev, 
 	input_set_drvdata(dev, info);
 }
 
-static int fts_probe(struct i2c_client *client, const struct i2c_device_id *idp)
+static int fts_probe(struct i2c_client *client)
 {
 	int retval;
 	struct fts_ts_info *info = NULL;
@@ -2970,7 +2968,7 @@ err_setup_drv_data:
 	return retval;
 }
 
-static int fts_remove(struct i2c_client *client)
+static void fts_remove(struct i2c_client *client)
 {
 	struct fts_ts_info *info = i2c_get_clientdata(client);
 #if defined(CONFIG_INPUT_SEC_SECURE_TOUCH)
@@ -3050,7 +3048,7 @@ static int fts_remove(struct i2c_client *client)
 	g_info = NULL;
 	kfree(info);
 
-	return 0;
+	return ((void)0x00000000);
 }
 
 #ifdef USE_OPEN_CLOSE
