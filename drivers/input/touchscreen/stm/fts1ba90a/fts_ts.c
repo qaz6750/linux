@@ -3422,14 +3422,14 @@ static void fts_read_info_work(struct work_struct *work)
 
 void fts_set_utc_sponge(struct fts_ts_info *info)
 {
-	struct timeval current_time;
+	struct timespec64 current_time;
 	u8 data[4];
 
-	do_gettimeofday(&current_time);
-	data[0] = (u8)(current_time.tv_sec >> 0 & 0xFF);
-	data[1] = (u8)(current_time.tv_sec >> 8 & 0xFF);
-	data[2] = (u8)(current_time.tv_sec >> 16 & 0xFF);
-	data[3] = (u8)(current_time.tv_sec >> 24 & 0xFF);
+	ktime_get_real_ts64(&current_time);
+	data[0] = (0xFF & (u8)((current_time.tv_sec) >> 0));
+	data[1] = (0xFF & (u8)((current_time.tv_sec) >> 8));
+	data[2] = (0xFF & (u8)((current_time.tv_sec) >> 16));
+	data[3] = (0xFF & (u8)((current_time.tv_sec) >> 24));
 
 	fts_write_to_sponge(info, FTS_CMD_SPONGE_OFFSET_UTC, data, sizeof(data));
 }
