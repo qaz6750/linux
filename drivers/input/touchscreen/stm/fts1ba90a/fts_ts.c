@@ -3688,5 +3688,5 @@ MODULE_DESCRIPTION("STMicroelectronics MultiTouch IC Driver");
 MODULE_AUTHOR("STMicroelectronics, Inc.");
 MODULE_LICENSE("GPL v2");
 
-module_init(fts_driver_init);
+late_initcall(fts_driver_init);
 module_exit(fts_driver_exit);
