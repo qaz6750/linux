@@ -133,6 +133,18 @@
 			reg = <0x0 0xa4c00000 0x0 0x1400000>;
 			no-map;
 		};
+
+		ramoops@A1300000 {
+			compatible = "ramoops";
+			reg = <0x0 0xc1300000 0x0 0x100000>;
+            record-size = <0x40000>;
+            console-size = <0x40000>;
+            ftrace-size = <0x40000>;
+            pmsg-size = <0x40000>;
+			ecc-size = <16>;
+			no-map;
+		};
+
 	};
 };
 
