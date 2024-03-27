@@ -198,3 +198,8 @@ obj-$(CONFIG_CDX_BUS)		+= cdx/
 obj-$(CONFIG_DPLL)		+= dpll/
 
 obj-$(CONFIG_S390)		+= s390/
+
+# Gts6lwifi drivers
+
+# COMBO REDRIVER
+obj-$(CONFIG_COMBO_REDRIVER_PTN36502)	+= redriver/
