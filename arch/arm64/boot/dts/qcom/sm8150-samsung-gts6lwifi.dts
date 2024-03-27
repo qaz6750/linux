@@ -46,6 +46,27 @@
 		};
 	};
 
+    dummy_vreg:  regulator-dummy {
+        compatible = "regulator-fixed";
+        status = "ok";
+        regulator-name = "dummy_vreg";
+        regulator-always-on;
+    };
+
+	ts_pwr_1: ts-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "ts_pwr_1";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+	};
+
+	ts_pwr_2: ts-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "ts_pwr_2";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+	};
+
 	vph_pwr: vph-pwr-regulator {
 		compatible = "regulator-fixed";
 		regulator-name = "vph_pwr";
@@ -250,6 +271,7 @@
 			regulator-min-microvolt = <1800000>;
 			regulator-max-microvolt = <1800000>;
 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-boot-on;
 		};
 
 		vreg_l15a_1p7: ldo15 {
@@ -418,38 +440,6 @@
 	status = "okay";
 };
 
-&i2c17 {
-	clock-frequency = <400000>;
-	status = "okay";
-
-	/* stm */
-	touchscreen@49 {
-		status = "disabled";
-		compatible = "stm,fts_touch";
-		reg = <0x49>;
-		interrupt-parent = <&tlmm>;
-		interrupts = <87 0>;
-		pinctrl-names = "on_state", "off_state";
-		pinctrl-0 = <&attn_irq>;
-		pinctrl-1 = <&attn_irq>;
-		stm,irq_gpio = <&tlmm 87 0x2008>;
-		stm,irq_type = <8200>;
-		stm,max_coords = <1599 2559>;	/* x y */
-		stm,regulator_dvdd = "vreg_l14a_1p8";
-		stm,regulator_avdd = "vreg_l17a_3p0";
-		stm,project_name = "GTS5", "T865";
-		stm,firmware_name = "tsp_stm/fts1ba90a_gts5.fw";
-		stm,tclm_level = <2>;
-		stm,afe_base = <0x0004>;
-		stm,enable_settings_aot;
-		support_dex_mode;
-		stm,ss_touch_num = <1>;
-		stm,enable_vbus_noti;
-		stm,support_fod;
-	};
-
-};
-
 &gpi_dma0 {
 	status = "okay";
 };
@@ -472,6 +462,36 @@
 
 &qupv3_id_2 {
 	status = "okay";
+};
+
+&i2c17 {
+	status = "okay";
+
+	/* stm */
+	touchscreen@49 {
+		status = "okay";
+		compatible = "stm,fts_touch";
+		reg = <0x49>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <87 0>;
+		pinctrl-names = "on_state", "off_state";
+		pinctrl-0 = <&attn_irq>;
+		pinctrl-1 = <&attn_irq>;
+		stm,irq_gpio = <&tlmm 87 0x2008>;
+		stm,irq_type = <8200>;
+		stm,max_coords = <1599 2559>;	/* x y */
+		stm,regulator_dvdd = <&ts_pwr_1>;
+		stm,regulator_avdd = <&ts_pwr_2>;
+		stm,project_name = "GTS5", "T865";
+		stm,firmware_name = "tsp_stm/fts1ba90a_gts5.fw";
+		stm,tclm_level = <2>;
+		stm,afe_base = <0x0004>;
+		stm,enable_settings_aot;
+		support_dex_mode;
+		stm,ss_touch_num = <1>;
+		stm,enable_vbus_noti;
+		stm,support_fod;
+	};
 };
 
 &pon_resin {
