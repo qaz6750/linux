@@ -2186,81 +2186,6 @@ out:
 }
 #endif
 
-static int fts_power_ctrl(void *data, bool on)
-{
-	struct fts_ts_info *info = (struct fts_ts_info *)data;
-	const struct fts_i2c_platform_data *pdata = info->board;
-	struct device *dev = &info->client->dev;
-	struct regulator *regulator_dvdd = NULL;
-	struct regulator *regulator_avdd = NULL;
-	static bool enabled;
-	int retval = 0;
-
-	if (enabled == on)
-		return retval;
-
-	regulator_dvdd = regulator_get(NULL, pdata->regulator_dvdd);
-	if (IS_ERR_OR_NULL(regulator_dvdd)) {
-		input_err(true, dev, "%s: Failed to get %s regulator\n",
-				__func__, pdata->regulator_dvdd);
-		goto out;
-	}
-
-	regulator_avdd = regulator_get(NULL, pdata->regulator_avdd);
-	if (IS_ERR_OR_NULL(regulator_avdd)) {
-		input_err(true, dev, "%s: Failed to get %s regulator\n",
-				__func__, pdata->regulator_avdd);
-		goto out;
-	}
-
-	if (on) {
-		retval = regulator_enable(regulator_avdd);
-		if (retval) {
-			input_err(true, dev, "%s: Failed to enable avdd: %d\n", __func__, retval);
-			regulator_disable(regulator_avdd);
-			goto out;
-		}
-
-		fts_delay(1);
-
-		retval = regulator_enable(regulator_dvdd);
-		if (retval) {
-			input_err(true, dev, "%s: Failed to enable vdd: %d\n", __func__, retval);
-			regulator_disable(regulator_dvdd);
-			regulator_disable(regulator_avdd);
-			goto out;
-		}
-
-		if (!IS_ERR_OR_NULL(pdata->pins_default)) {
-			retval = pinctrl_select_state(pdata->pinctrl, pdata->pins_default);
-			if (retval < 0)
-				input_err(true, dev, "%s: Failed to configure tsp_attn pin\n", __func__);
-		}
-		fts_delay(5);
-	} else {
-		regulator_disable(regulator_dvdd);
-		regulator_disable(regulator_avdd);
-
-		if (!IS_ERR_OR_NULL(pdata->pins_sleep)) {
-			retval = pinctrl_select_state(pdata->pinctrl, pdata->pins_sleep);
-			if (retval < 0)
-				input_err(true, dev, "%s: Failed to configure tsp_attn pin\n", __func__);
-		}
-	}
-
-	enabled = on;
-
-	input_err(true, dev, "%s: %s: avdd:%s, dvdd:%s\n", __func__, on ? "on" : "off",
-			regulator_is_enabled(regulator_avdd) ? "on" : "off",
-			regulator_is_enabled(regulator_dvdd) ? "on" : "off");
-
-out:
-	regulator_put(regulator_dvdd);
-	regulator_put(regulator_avdd);
-
-	return retval;
-}
-
 static int fts_parse_dt(struct i2c_client *client)
 {
 	struct device *dev = &client->dev;
@@ -2318,6 +2243,9 @@ static int fts_parse_dt(struct i2c_client *client)
 		input_err(true, dev, "%s: skipped to get device-id gpio\n", __func__);
 
 	pdata->irq_gpio = of_get_named_gpio(np, "stm,irq_gpio", 0);
+
+	input_info(true, dev, "%s: irq_gpio = %d\n", __func__, pdata->irq_gpio);
+
 	if (gpio_is_valid(pdata->irq_gpio)) {
 		retval = gpio_request_one(pdata->irq_gpio, GPIOF_DIR_IN, "stm,tsp_int");
 		if (retval) {
@@ -2352,17 +2280,6 @@ static int fts_parse_dt(struct i2c_client *client)
 		pdata->display_x = coords[0];
 		pdata->display_y = coords[1];
 	}
-
-	if (of_property_read_string(np, "stm,regulator_dvdd", &pdata->regulator_dvdd)) {
-		input_err(true, dev, "%s: Failed to get regulator_dvdd name property\n", __func__);
-		return -EINVAL;
-	}
-
-	if (of_property_read_string(np, "stm,regulator_avdd", &pdata->regulator_avdd)) {
-		input_err(true, dev, "%s: Failed to get regulator_avdd name property\n", __func__);
-		return -EINVAL;
-	}
-	pdata->power = fts_power_ctrl;
 
 	/* Optional parmeters(those values are not mandatory)
 	 * do not return error value even if fail to get the value
@@ -2545,10 +2462,6 @@ static int fts_setup_drv_data(struct i2c_client *client)
 
 	if (!pdata) {
 		input_err(true, &client->dev, "%s: No platform data found\n", __func__);
-		return -EINVAL;
-	}
-	if (!pdata->power) {
-		input_err(true, &client->dev, "%s: No power contorl found\n", __func__);
 		return -EINVAL;
 	}
 
