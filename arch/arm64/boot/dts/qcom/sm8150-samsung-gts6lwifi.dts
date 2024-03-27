@@ -476,6 +476,19 @@
 	status = "okay";
 };
 
+&i2c10 {
+	status = "okay";
+
+	ptn36502@1a {
+		compatible = "ptn36502_driver";
+		reg = <0x1a>;
+		combo,redriver_scl = <&tlmm 10 0>;
+		combo,redriver_sda = <&tlmm 9 0>;
+		combo,redriver_en = <&tlmm 97 0>;
+		combo,con_sel = <&tlmm 38 0>;
+	};
+
+};
 &i2c17 {
 	status = "okay";
 
