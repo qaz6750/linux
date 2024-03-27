@@ -481,7 +481,7 @@
 
 	/* stm */
 	touchscreen@49 {
-		status = "okay";
+		status = "disabled";
 		compatible = "stm,fts_touch";
 		reg = <0x49>;
 		interrupt-parent = <&tlmm>;
