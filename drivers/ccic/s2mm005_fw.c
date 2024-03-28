@@ -426,7 +426,7 @@ int s2mm005_flash(struct s2mm005_data *usbpd_data, unsigned int input)
 		}
 
 		filp_close(fp, NULL);
-		set_fs(old_fs);
+		// set_fs(old_fs);
 		break;
 	}
 	case FLASH_MODE_EXIT: { /* exit flash mode */

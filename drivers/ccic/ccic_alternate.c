@@ -452,9 +452,9 @@ static int process_discover_svids(void * data)
 	CC_NOTI_TYPEDEF ccic_alt_noti;
 	// Message Type Definition
 	U_VDO1_Type 				  *DATA_MSG_VDO1 = (U_VDO1_Type *)&ReadMSG[8];
-#if defined(CONFIG_USB_HOST_NOTIFY)
+
 	uint timeleft = 0;
-#endif
+
 	ret = s2mm005_read_byte(i2c, REG_ADD, ReadMSG, 32);
 	if (ret < 0) {
 		dev_err(&i2c->dev, "%s has i2c error.\n", __func__);

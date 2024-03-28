@@ -20,9 +20,11 @@
  */
 #include <linux/ccic/s2mm005_ext.h>
 #include <linux/power_supply.h>
-#if defined(CONFIG_BATTERY_NOTIFIER)
+
+// This should have been controlled and defined by CONFIG_BATTERY_NOTIFIER, 
+// but to reduce unnecessary definitions, we default to including the battery_notifier.h file.
 #include <linux/battery/battery_notifier.h>
-#endif
+
 #include <linux/usb_notify.h>
 #if defined(CONFIG_CCIC_ALTERNATE_MODE)
 #include <linux/ccic/ccic_alternate.h>
@@ -359,7 +361,6 @@ void process_pd(void *data, u8 plug_attach_done, u8 *pdic_attach, MSG_IRQ_STATUS
 	}
 
 	/* notify to battery */
-#ifdef CONFIG_USB_TYPEC_MANAGER_NOTIFIER
 	if (plug_attach_done) {
 		if (*pdic_attach  && !is_src && usbpd_data->pd_state == State_PE_SNK_Ready) {
 			/* PD charger is detected by PDIC */
@@ -398,20 +399,4 @@ void process_pd(void *data, u8 plug_attach_done, u8 *pdic_attach, MSG_IRQ_STATUS
 		pd_noti.sink_status.current_pdo_num = 0;
 		pd_noti.event = PDIC_NOTIFY_EVENT_DETACH;
 	}
-#else
-	if(plug_attach_done)
-	{
-		/* PD notify */
-		if(*pdic_attach)
-			pd_noti.event = PDIC_NOTIFY_EVENT_PD_SINK;
-		else
-			pd_noti.event = PDIC_NOTIFY_EVENT_CCIC_ATTACH;
-	}
-	else
-	{
-		pd_noti.sink_status.selected_pdo_num = 0;
-		pd_noti.event = PDIC_NOTIFY_EVENT_DETACH;
-	}
-	pdic_notifier_call(pd_noti);
-#endif
 }

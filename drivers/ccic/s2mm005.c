@@ -23,6 +23,9 @@
 #include <linux/ccic/s2mm005_fw.h>
 #include <linux/usb_notify.h>
 #include <linux/ccic/ccic_sysfs.h>
+
+#include <linux/pinctrl/consumer.h>
+
 #if defined(CONFIG_CCIC_NOTIFIER)
 #include <linux/ccic/ccic_sysfs.h>
 #include <linux/ccic/ccic_core.h>
@@ -31,6 +34,10 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 #include <linux/regulator/consumer.h>
+
+// This should have been controlled and defined by CONFIG_BATTERY_NOTIFIER, 
+// but to reduce unnecessary definitions, we default to including the battery_notifier.h file.
+#include <linux/battery/battery_notifier.h>
 
 static enum ccic_sysfs_property s2mm005_sysfs_properties[] = {
 	CCIC_SYSFS_PROP_CHIP_NAME,
@@ -1255,8 +1262,7 @@ static void delayed_external_notifier_init(struct work_struct *work)
 	}
 }
 
-static int s2mm005_usbpd_probe(struct i2c_client *i2c,
-			       const struct i2c_device_id *id)
+static int s2mm005_usbpd_probe(struct i2c_client *i2c)
 {
 	struct i2c_adapter *adapter = to_i2c_adapter(i2c->dev.parent);
 	struct s2mm005_data *usbpd_data;
@@ -1682,7 +1688,7 @@ err_free_irq_gpio:
 	return ret;
 }
 
-static int s2mm005_usbpd_remove(struct i2c_client *i2c)
+static void s2mm005_usbpd_remove(struct i2c_client *i2c)
 {
 	struct s2mm005_data *usbpd_data = g_usbpd_data;
 
@@ -1709,7 +1715,7 @@ static int s2mm005_usbpd_remove(struct i2c_client *i2c)
 	}
 
 	wake_lock_destroy(&usbpd_data->wlock);
-	return 0;
+	return ((void)0);
 }
 
 static void s2mm005_usbpd_shutdown(struct i2c_client *i2c)

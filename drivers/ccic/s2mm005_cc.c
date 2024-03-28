@@ -45,6 +45,8 @@ extern unsigned int lpcharge;
 #include <linux/usb/typec.h>
 #endif
 
+#include <linux/battery/battery_notifier.h>
+
 int CC_DIR;
 EXPORT_SYMBOL(CC_DIR);
 
