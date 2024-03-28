@@ -2,6 +2,15 @@
 # Automatically generated file; DO NOT EDIT.
 #
 
+# Samsung Galaxy Tab S6 WIFI
+
+#
+# Combo driver configs
+#
+CONFIG_COMBO_REDRIVER_PTN36502=y
+
+# Currency
+
 CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 12.2.0-17ubuntu1) 12.2.0"
 CONFIG_CC_IS_GCC=y
 CONFIG_GCC_VERSION=120200
@@ -5202,14 +5211,17 @@ CONFIG_USB_ETH_EEM=y
 # CONFIG_USB_RAW_GADGET is not set
 # end of USB Gadget precomposed configurations
 
+#
+# USB Power Delivery and Type-C drivers
+#
 CONFIG_TYPEC=y
-CONFIG_TYPEC_TCPM=y
+# CONFIG_TYPEC_UCSI is not set
+
 CONFIG_TYPEC_TCPCI=y
 CONFIG_TYPEC_RT1711H=y
 CONFIG_TYPEC_TCPCI_MAXIM=y
 # CONFIG_TYPEC_FUSB302 is not set
 CONFIG_TYPEC_QCOM_PMIC=y
-CONFIG_TYPEC_UCSI=y
 CONFIG_UCSI_CCG=y
 # CONFIG_UCSI_STM32G0 is not set
 CONFIG_UCSI_PMIC_GLINK=y
@@ -5223,7 +5235,7 @@ CONFIG_TYPEC_RT1719=y
 #
 # USB Type-C Multiplexer/DeMultiplexer Switch support
 #
-CONFIG_TYPEC_MUX_FSA4480=y
+# CONFIG_TYPEC_MUX_FSA4480 is not set
 CONFIG_TYPEC_MUX_GPIO_SBU=y
 CONFIG_TYPEC_MUX_PI3USB30532=y
 # CONFIG_TYPEC_MUX_NB7VPQ904M is not set
@@ -6590,6 +6602,13 @@ CONFIG_ANDROID_BINDER_IPC=y
 CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
 # CONFIG_ANDROID_BINDER_IPC_SELFTEST is not set
 # end of Android
+
+#
+# USB Power Delivery and Type-C drivers
+#
+# CONFIG_TYPEC_TCPM is not set
+# CONFIG_PI433 is not set
+CONFIG_SEC_STI=y
 
 # CONFIG_LIBNVDIMM is not set
 # CONFIG_DAX is not set
