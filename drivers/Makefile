@@ -201,6 +201,10 @@ obj-$(CONFIG_S390)		+= s390/
 
 # Gts6lwifi drivers
 
+ifeq ($(CONFIG_BATTERY_SAMSUNG_V2), y)
+	obj-$(CONFIG_BATTERY_SAMSUNG)	+= battery_v2/
+endif
+
 # CCIC
 obj-y				+= ccic/
 
