@@ -491,31 +491,18 @@
 };
 &i2c17 {
 	status = "okay";
+	clock-frequency = <400000>;
 
-	/* stm */
-	touchscreen@49 {
-		status = "disabled";
-		compatible = "stm,fts_touch";
+	tsp_stm: touchscreen@49 {
+	    status = "okay";
+		compatible = "st,stmfts_fts1ba90a";
 		reg = <0x49>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&tsp_int>;
 		interrupt-parent = <&tlmm>;
-		interrupts = <87 0>;
-		pinctrl-names = "on_state", "off_state";
-		pinctrl-0 = <&attn_irq>;
-		pinctrl-1 = <&attn_irq>;
-		stm,irq_gpio = <&tlmm 87 0x2008>;
-		stm,irq_type = <8200>;
-		stm,max_coords = <1599 2559>;	/* x y */
-		stm,regulator_dvdd = <&ts_pwr_1>;
-		stm,regulator_avdd = <&ts_pwr_2>;
-		stm,project_name = "GTS5", "T865";
-		stm,firmware_name = "tsp_stm/fts1ba90a_gts5.fw";
-		stm,tclm_level = <2>;
-		stm,afe_base = <0x0004>;
-		stm,enable_settings_aot;
-		support_dex_mode;
-		stm,ss_touch_num = <1>;
-		stm,enable_vbus_noti;
-		stm,support_fod;
+		interrupts = <87 0x2008>;
+		avdd-supply = <&ts_pwr_2>;
+		vdd-supply = <&ts_pwr_1>;
 	};
 };
 
@@ -528,7 +515,7 @@
 &tlmm {
 	gpio-reserved-ranges = <0 4>, <126 4>;
 
-	attn_irq: attn_irq {
+	tsp_int: tsp_int {
 		mux {
 			pins = "gpio87";
 			function = "gpio";
