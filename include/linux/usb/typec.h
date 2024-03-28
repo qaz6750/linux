@@ -283,6 +283,17 @@ struct typec_capability {
 	struct usb_power_delivery *pd;
 
 	const struct typec_operations	*ops;
+
+
+	int	(*try_role)(const struct typec_capability *, int role);
+
+	int	(*dr_set)(const struct typec_capability *, enum typec_data_role);
+	int	(*pr_set)(const struct typec_capability *,enum typec_role);
+	int	(*vconn_set)(const struct typec_capability *, enum typec_role);
+
+	int	(*activate_mode)(const struct typec_capability *, int mode, int activate);
+	int	(*port_type_set)(const struct typec_capability *, enum typec_port_type);
+
 };
 
 /* Specific to try_role(). Indicates the user want's to clear the preference. */
