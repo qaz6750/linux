@@ -247,6 +247,8 @@ source "drivers/dpll/Kconfig"
 
 # Gts6lwifi drivers
 
+source "drivers/ccic/Kconfig"
+
 source "drivers/redriver/Kconfig"
 
 endmenu

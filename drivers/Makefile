@@ -201,5 +201,8 @@ obj-$(CONFIG_S390)		+= s390/
 
 # Gts6lwifi drivers
 
+# CCIC
+obj-y				+= ccic/
+
 # COMBO REDRIVER
 obj-$(CONFIG_COMBO_REDRIVER_PTN36502)	+= redriver/
