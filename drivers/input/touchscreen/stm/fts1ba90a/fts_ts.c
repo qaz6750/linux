@@ -2617,13 +2617,13 @@ static int fts_probe(struct i2c_client *client)
 		input_err(true, &client->dev, "%s: FTS err = EIO!\n", __func__);
 		return -EIO;
 	}
-#ifdef CONFIG_BATTERY_SAMSUNG
-	if (lpcharge == 1) {
-		input_err(true, &client->dev, "%s: Do not load driver due to : lpm %d\n",
-				__func__, lpcharge);
-		return -ENODEV;
-	}
-#endif
+//#ifdef CONFIG_BATTERY_SAMSUNG
+//	if (lpcharge == 1) {
+//		input_err(true, &client->dev, "%s: Do not load driver due to : lpm %d\n",
+//				__func__, lpcharge);
+//		return -ENODEV;
+//	}
+//#endif
 	/* Build up driver data */
 	retval = fts_setup_drv_data(client);
 	if (retval < 0) {
