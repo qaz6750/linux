@@ -15,6 +15,10 @@
 #include <uapi/linux/android/binderfs.h>
 #include "binder_alloc.h"
 
+#ifndef CONFIG_ACCESS_TOKENID
+#define CONFIG_ACCESS_TOKENID	1
+#endif
+
 struct binder_context {
 	struct binder_node *binder_context_mgr_node;
 	struct mutex context_mgr_node_lock;
@@ -490,6 +494,9 @@ struct binder_thread {
 	struct binder_stats stats;
 	atomic_t tmp_ref;
 	bool is_dead;
+#ifdef CONFIG_ACCESS_TOKENID
+	struct access_token tokens;
+#endif /* CONFIG_ACCESS_TOKENID */
 };
 
 /**
@@ -515,6 +522,11 @@ struct binder_transaction {
 	int debug_id;
 	struct binder_work work;
 	struct binder_thread *from;
+#ifdef CONFIG_BINDER_TRANSACTION_PROC_BRIEF
+	int async_from_pid;
+	int async_from_tid;
+	u64 timestamp;
+#endif
 	pid_t from_pid;
 	pid_t from_tid;
 	struct binder_transaction *from_parent;
@@ -540,6 +552,10 @@ struct binder_transaction {
 	 * during thread teardown
 	 */
 	spinlock_t lock;
+#ifdef CONFIG_ACCESS_TOKENID
+	u64 sender_tokenid;
+	u64 first_tokenid;
+#endif /* CONFIG_ACCESS_TOKENID */
 };
 
 /**
