@@ -411,3 +411,7 @@ config DRM_LIB_RANDOM
 config DRM_PRIVACY_SCREEN
 	bool
 	default n
+
+config DRM_IGNORE_IOTCL_PERMIT
+	bool "Ignore drm ioctl permission"
+	depends on DRM
