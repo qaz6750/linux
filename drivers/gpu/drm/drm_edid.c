@@ -6484,29 +6484,6 @@ static void drm_reset_display_info(struct drm_connector *connector)
 	info->quirks = 0;
 }
 
-static void update_displayid_info(struct drm_connector *connector,
-				  const struct drm_edid *drm_edid)
-{
-	struct drm_display_info *info = &connector->display_info;
-	const struct displayid_block *block;
-	struct displayid_iter iter;
-
-	displayid_iter_edid_begin(drm_edid, &iter);
-	displayid_iter_for_each(block, &iter) {
-		if (displayid_version(&iter) == DISPLAY_ID_STRUCTURE_VER_20 &&
-		    (displayid_primary_use(&iter) == PRIMARY_USE_HEAD_MOUNTED_VR ||
-		     displayid_primary_use(&iter) == PRIMARY_USE_HEAD_MOUNTED_AR))
-			info->non_desktop = true;
-
-		/*
-		 * We're only interested in the base section here, no need to
-		 * iterate further.
-		 */
-		break;
-	}
-	displayid_iter_end(&iter);
-}
-
 static void update_display_info(struct drm_connector *connector,
 				const struct drm_edid *drm_edid)
 {
@@ -6536,8 +6513,6 @@ static void update_display_info(struct drm_connector *connector,
 
 	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
 	drm_parse_cea_ext(connector, drm_edid);
-
-	update_displayid_info(connector, drm_edid);
 
 	/*
 	 * Digital sink with "DFP 1.x compliant TMDS" according to EDID 1.3?
@@ -7318,15 +7293,6 @@ static void drm_parse_tiled_block(struct drm_connector *connector,
 	}
 }
 
-static bool displayid_is_tiled_block(const struct displayid_iter *iter,
-				     const struct displayid_block *block)
-{
-	return (displayid_version(iter) == DISPLAY_ID_STRUCTURE_VER_12 &&
-		block->tag == DATA_BLOCK_TILED_DISPLAY) ||
-		(displayid_version(iter) == DISPLAY_ID_STRUCTURE_VER_20 &&
-		 block->tag == DATA_BLOCK_2_TILED_DISPLAY_TOPOLOGY);
-}
-
 static void _drm_update_tile_info(struct drm_connector *connector,
 				  const struct drm_edid *drm_edid)
 {
@@ -7337,7 +7303,7 @@ static void _drm_update_tile_info(struct drm_connector *connector,
 
 	displayid_iter_edid_begin(drm_edid, &iter);
 	displayid_iter_for_each(block, &iter) {
-		if (displayid_is_tiled_block(&iter, block))
+		if (block->tag == DATA_BLOCK_TILED_DISPLAY)
 			drm_parse_tiled_block(connector, block);
 	}
 	displayid_iter_end(&iter);
