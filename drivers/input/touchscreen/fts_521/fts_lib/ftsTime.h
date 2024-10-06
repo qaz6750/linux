@@ -43,10 +43,8 @@
 *	Struct used to measure the time elapsed between a starting and ending point.
 */
 typedef struct {
-//	struct timespec start;																/*store the starting time*/
-//	struct timespec end;																/*store the finishing time*/
-    ktime_t start;																/*store the starting time*/
-    ktime_t end;																/*store the finishing time*/
+	struct timespec64 start;	/* /< store the starting time */
+	struct timespec64 end;	/* /< store the finishing time */
 } StopWatch;
 
 void startStopWatch(StopWatch *w);

@@ -4195,6 +4195,7 @@ int fts_fw_update(struct fts_ts_info *info, const char *fw_name, int force)
 	}
 
 	if (fw_name) {
+		/*
 		if (force)
 			retval = flashProcedure(fw_name, 1, keep_cx);
 		else
@@ -4213,6 +4214,7 @@ int fts_fw_update(struct fts_ts_info *info, const char *fw_name, int force)
 				logError(1, "%s Fw Auto Update Failed!\n", tag);
 			}
 		}
+		*/
 	}
 
 	logError(1, "%s %s: Verifying if CX CRC Error...\n", tag, __func__,

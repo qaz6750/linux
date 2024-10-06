@@ -37,7 +37,7 @@
 */
 void startStopWatch(StopWatch *w)
 {
-	w->start = ktime_get();
+	ktime_get_coarse_real_ts64(&w->start);
 }
 
 /**
@@ -46,7 +46,7 @@ void startStopWatch(StopWatch *w)
 */
 void stopStopWatch(StopWatch *w)
 {
-	w->end = ktime_get();
+	ktime_get_coarse_real_ts64(&w->end);
 }
 
 /**
@@ -56,25 +56,24 @@ void stopStopWatch(StopWatch *w)
 */
 int elapsedMillisecond(StopWatch *w)
 {
-	u64 result;
+	int result;
 
-	result = ktime_us_delta(w->end, w->start);
-
-	return (int)(result / 1000);
+	result = ((w->end.tv_sec - w->start.tv_sec) * 1000) +
+		 (w->end.tv_nsec - w->start.tv_nsec) / 1000000;
+	return result;
 }
 
 /**
 * Compute the amount of time spent from when the startStopWatch and then the stopStopWatch were called on the StopWatch variable
 * @param w pointer of a StopWatch struct
 * @return amount of time in ns (the return value is meaningless if the startStopWatch and stopStopWatch were not called before)
+*/
 
 int elapsedNanosecond(StopWatch *w)
 {
 	int result;
 
-	result =
-	    ((w->end.tv_sec - w->start.tv_sec) * 1000000000) + (w->end.tv_nsec -
-								w->start.tv_nsec);
+	result = ((w->end.tv_sec - w->start.tv_sec) * 1000000000) +
+		 (w->end.tv_nsec - w->start.tv_nsec);
 	return result;
 }
-*/
